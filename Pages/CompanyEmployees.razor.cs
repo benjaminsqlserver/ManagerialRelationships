@@ -10,7 +10,7 @@ using Radzen.Blazor;
 
 namespace EmployeesApp.Pages
 {
-    public partial class Employees
+    public partial class CompanyEmployees
     {
         [Inject]
         protected IJSRuntime JSRuntime { get; set; }
@@ -46,11 +46,11 @@ namespace EmployeesApp.Pages
 
             await grid0.GoToPage(0);
 
-            employees = await ConDataService.GetEmployees(new Query { Filter = $@"i => i.FirstName.Contains(@0) || i.MiddleName.Contains(@0) || i.LastName.Contains(@0) || i.EmployeePhoto.Contains(@0)", FilterParameters = new object[] { search }, Expand = "Department,Gender,Employee1" });
+            employees = await ConDataService.GetEmployeesInDescendingOrder(new Query { Filter = $@"i => i.FirstName.Contains(@0) || i.MiddleName.Contains(@0) || i.LastName.Contains(@0) || i.EmployeePhoto.Contains(@0)", FilterParameters = new object[] { search }, Expand = "Department,Gender,Employee1" });
         }
         protected override async Task OnInitializedAsync()
         {
-            employees = await ConDataService.GetEmployees(new Query { Filter = $@"i => i.FirstName.Contains(@0) || i.MiddleName.Contains(@0) || i.LastName.Contains(@0) || i.EmployeePhoto.Contains(@0)", FilterParameters = new object[] { search }, Expand = "Department,Gender,Employee1" });
+            employees = await ConDataService.GetEmployeesInDescendingOrder(new Query { Filter = $@"i => i.FirstName.Contains(@0) || i.MiddleName.Contains(@0) || i.LastName.Contains(@0) || i.EmployeePhoto.Contains(@0)", FilterParameters = new object[] { search }, Expand = "Department,Gender,Employee1" });
 
             departmentsForDepartmentID = await ConDataService.GetDepartments();
 
@@ -129,11 +129,15 @@ namespace EmployeesApp.Pages
 
         protected IEnumerable<EmployeesApp.Models.ConData.Employee> employeesForManagerID;
 
+        //method that insert or update employee object
         protected async Task FormSubmit()
         {
             try
             {
                 var result = isEdit ? await ConDataService.UpdateEmployee(employee.EmployeeID, employee) : await ConDataService.CreateEmployee(employee);
+                //force a page refresh from server
+                NavigationManager.NavigateTo("company-employees",true);
+
 
             }
             catch (Exception ex)

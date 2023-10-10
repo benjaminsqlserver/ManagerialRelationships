@@ -108,7 +108,7 @@
                         <RadzenLabel Text="Manager" Component="Employee1" style="width: 100%" />
                     </RadzenColumn>
                     <RadzenColumn SizeMD="9">
-                        <RadzenDropDownDataGrid Data="@employeesForManagerID" TextProperty="FirstName" ValueProperty="EmployeeID" AllowClear=true
+                        <RadzenDropDownDataGrid Data="@employeesForManagerID" TextProperty="FullName" ValueProperty="EmployeeID" AllowClear=true
                              Placeholder="Choose Manager" style="display: block; width: 100%" @bind-Value="@employee.ManagerID" Name="ManagerID"
                                />
                     </RadzenColumn>
